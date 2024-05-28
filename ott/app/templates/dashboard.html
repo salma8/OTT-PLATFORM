@@ -12,101 +12,238 @@
             justify-content: space-between;
             align-items: center;
         }
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .modal-dialog {
+            max-width: 800px;
+        }
     </style>
 </head>
 <body>
 <div class="container mt-5">
     <h1 class="mb-4">Admin Dashboard</h1>
-    <div class="row">
-        <div class="col-md-6">
+    <div class="row mb-4">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h3>Movie List</h3>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#addMovieModal">Add New Movie</button>
                     <button class="btn btn-primary" data-toggle="collapse" data-target="#movieTable">Show List</button>
                 </div>
                 <div id="movieTable" class="card-body collapse show">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Genre</th>
-                                <th>Director</th>
-                                <th>Duration</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for movie in movies %}
-                            <tr>
-                                <td>{{ movie.title }}</td>
-                                <td>{{ movie.genre }}</td>
-                                <td>{{ movie.director }}</td>
-                                <td>{{ movie.duration }}</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Actions
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Edit</a>
-                                            <a class="dropdown-item" href="#">Delete</a>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Genre</th>
+                                    <th>Director</th>
+                                    <th>Duration</th>
+                                    <th>Actor</th>
+                                    <th>Image</th>
+                                    <th>Video</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for movie in movies %}
+                                <tr>
+                                    <td>{{ movie.title }}</td>
+                                    <td>{{ movie.description }}</td>
+                                    <td>{{ movie.genre }}</td>
+                                    <td>{{ movie.director }}</td>
+                                    <td>{{ movie.duration }}</td>
+                                    <td>{{ movie.actor }}</td>
+                                    <td><img src="{{ movie.image }}" alt="Image" width="50"></td>
+                                    <td><a href="{{ movie.video }}" target="_blank">View Video</a></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#">Edit</a>
+                                                <a class="dropdown-item" href="#">Delete</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h3>Customer List</h3>
                     <button class="btn btn-primary" data-toggle="collapse" data-target="#customerTable">Show List</button>
                 </div>
                 <div id="customerTable" class="card-body collapse show">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email</th>
-                                <th>Mobile</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for customer in customers %}
-                            <tr>
-                                <td>{{ customer.FirstName }}</td>
-                                <td>{{ customer.LastName }}</td>
-                                <td>{{ customer.Email }}</td>
-                                <td>{{ customer.Mobile }}</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Actions
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Edit</a>
-                                            <a class="dropdown-item" href="#">Delete</a>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>End Date</th>
+                                    <th>Plan</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in customers %}
+                                <tr>
+                                    <td>{{ customer.FirstName }}</td>
+                                    <td>{{ customer.LastName }}</td>
+                                    <td>{{ customer.Email }}</td>
+                                    <td>{{ customer.Mobile }}</td>
+                                    <td>{{ customer.End_date}}</td>
+                                    <td>{{ customer.Plan }}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                <a class="dropdown-item" href="#">Edit</a>
+                                                <a class="dropdown-item" href="#">Delete</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Analytics</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="movieGenreChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Add Movie Modal -->
+<div class="modal fade" id="addMovieModal" tabindex="-1" role="dialog" aria-labelledby="addMovieModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMovieModalLabel">Add New Movie</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="movieTitle">Title</label>
+                        <input type="text" class="form-control" id="movieTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieDescription">Description</label>
+                        <textarea class="form-control" id="movieDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieGenre">Genre</label>
+                        <input type="text" class="form-control" id="movieGenre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieDirector">Director</label>
+                        <input type="text" class="form-control" id="movieDirector" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieDuration">Duration</label>
+                        <input type="text" class="form-control" id="movieDuration" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieActor">Actor</label>
+                        <input type="text" class="form-control" id="movieActor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieImage">Image</label>
+                        <input type="file" class="form-control-file" id="movieImage" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieVideo">Video</label>
+                        <input type="file" class="form-control-file" id="movieVideo" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Add Movie</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Sample data for the chart
+    const genreLabels = ['Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi'];
+    const genreData = [12, 19, 3, 5, 2];
+
+    // Chart configuration
+    const ctx = document.getElementById('movieGenreChart').getContext('2d');
+    const movieGenreChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: genreLabels,
+            datasets: [{
+                label: '# of Movies',
+                data: genreData,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>
