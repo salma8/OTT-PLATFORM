@@ -31,20 +31,16 @@
 <body>
     <div class="login-container">
         <h2 class="text-center">Login</h2>
-        <form>
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter password" required>
-            </div>
+
+        <form action="" method="post">
+            {%csrf_token%}
+             {{login.as_p}}
              <button type="submit" class="btn btn-primary btn-block">Login</button>
-        </form>
+
         <div class="text-center mt-3">
             <a href="#">Forgot Password?</a>
         </div>
+             </form>
     </div>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

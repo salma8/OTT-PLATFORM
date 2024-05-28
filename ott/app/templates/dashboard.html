@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .card-header {
@@ -21,9 +22,20 @@
         .modal-dialog {
             max-width: 800px;
         }
+        #{
+            float:right;
+        }
     </style>
 </head>
 <body>
+<nav class="navbar navbar-light bg-light">
+  <form class="form-inline ml-auto">
+      {% csrf_token %}
+      {{ logout.as_p }}
+    <button id="btn" class="btn btn-primary" type="button">Log Out</button>
+  </form>
+</nav>
+
 <div class="container mt-5">
     <h1 class="mb-4">Admin Dashboard</h1>
     <div class="row mb-4">
@@ -62,15 +74,15 @@
                                     <td><img src="{{ movie.image }}" alt="Image" width="50"></td>
                                     <td><a href="{{ movie.video }}" target="_blank">View Video</a></td>
                                     <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Actions
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="#">Edit</a>
-                                                <a class="dropdown-item" href="#">Delete</a>
+                                            <div class="dropdown">
+                                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
+                                                    style="padding-right:150px;width:150px;border:none">Action
+                                                </button>
+                                                <ul class="dropdown-menu narrow-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <li><a class="dropdown-item" href="#">Send Notification</a></li>
+                                                    <li><a class="dropdown-item" href="#">Disable</a></li>
+                                                </ul>
                                             </div>
-                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -112,15 +124,15 @@
                                     <td>{{ customer.End_date}}</td>
                                     <td>{{ customer.Plan }}</td>
                                     <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Actions
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                <a class="dropdown-item" href="#">Edit</a>
-                                                <a class="dropdown-item" href="#">Delete</a>
+                                            <div class="dropdown">
+                                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
+                                                    style="padding-right:150px;width:150px;border:none">Action
+                                                </button>
+                                                <ul class="dropdown-menu narrow-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <li><a class="dropdown-item" href="#">Send Notification</a></li>
+                                                    <li><a class="dropdown-item" href="#">Disable</a></li>
+                                                </ul>
                                             </div>
-                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -200,6 +212,7 @@
 </div>
 
 <!-- Bootstrap JS and dependencies -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
