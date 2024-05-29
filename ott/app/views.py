@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Movie, Customer
@@ -31,8 +32,26 @@ def admin_dashboard(request):
 
 
 def dashboard(request):
-    movies = Movie.objects.all()
-    customers = Customer.objects.all()
+    search_query = request.GET.get('search', '')
+
+    if search_query:
+        movies = Movie.objects.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(genre__icontains=search_query) |
+            Q(director__icontains=search_query) |
+            Q(actor__icontains=search_query)
+        )
+        customers = Customer.objects.filter(
+            Q(FirstName__icontains=search_query) |
+            Q(LastName__icontains=search_query) |
+            Q(Email__icontains=search_query) |
+            Q(Mobile__icontains=search_query) |
+            Q(Plan__icontains=search_query)
+        )
+    else:
+        movies = Movie.objects.all()
+        customers = Customer.objects.all()
     movie_form = MovieForm()
 
     if request.method == 'POST':

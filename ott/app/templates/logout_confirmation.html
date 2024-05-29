@@ -7,22 +7,25 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Logout Confirmation</h4>
-                        <p class="card-text">Are you sure you want to log out?</p>
-                        <form action="{% url 'logout_confirmation' %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">Yes, Log Out</button>
-                            <a href="/" class="btn btn-secondary">Cancel</a>
-                        </form>
-                    </div>
-                </div>
+   <div class="modal fade" id="logoutConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="logoutConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutConfirmationModalLabel">Logout Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to log out?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <a href="{% url 'logout_confirmation' %}" class="btn btn-primary">Yes, Log Out</a>
             </div>
         </div>
     </div>
+</div>
+
 </body>
 </html>

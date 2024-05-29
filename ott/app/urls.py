@@ -5,6 +5,6 @@ from .views import admin_dashboard, user_login, logout_confirmation
 urlpatterns = [
     path('admindash/', admin_dashboard, name='admin-dashboard'),
     path('', user_login, name='login'),
-    path('logout/confirm/', logout_confirmation, name='logout_confirmation'),
+    path('logout/', logout_confirmation, name='logout_confirmation'),
 
 ]

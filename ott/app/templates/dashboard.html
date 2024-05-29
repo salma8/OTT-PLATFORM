@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -25,13 +26,53 @@
         #{
             float:right;
         }
+        .modal-content .card-header {
+            background-color: #343a40;
+            color: #fff;
+            border-bottom: 1px solid #343a40;
+            }
+
+        .modal-content .modal-title {
+            margin: 0;
+            line-height: 1.5;
+            }
+
+        .modal-content .close {
+            color: #fff;
+            opacity: 1;
+                }
+
+        .modal-content .card-body {
+            padding: 1.5rem;
+        }
+
+        .modal-content .modal-footer {
+            border-top: 1px solid #e9ecef;
+            padding: 0.75rem;
+            }
+
+        .modal-content .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            }
+
+        .modal-content .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            }
+
+        .modal-dialog {
+            max-width: 600px;
+            }
+
     </style>
 </head>
 <body>
 <nav class="navbar navbar-light bg-light">
-  <form class="form-inline ml-auto" action="{% url 'logout_confirmation' %}">
+  <form class="form-inline ml-auto">
       {% csrf_token %}
-    <button id="btn" class="btn btn-primary" type="button">Log Out</button>
+      {{logout_confirmation.as_p}}
+    <button id="logout_btn" class="btn btn-primary" type="button">Log Out</button>
   </form>
 </nav>
 
@@ -42,6 +83,10 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Movie List</h3>
+                    <form class="form-inline" method="GET" action="{% url 'admin-dashboard' %}">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search Movies" aria-label="Search" name="search" value="{{ search_query }}">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </form>
                     <button class="btn btn-primary" data-toggle="modal" data-target="#addMovieModal">Add New Movie</button>
                     <button class="btn btn-primary" data-toggle="collapse" data-target="#movieTable">Show List</button>
                 </div>
@@ -97,6 +142,10 @@
             <div class="card">
                 <div class="card-header">
                     <h3>Customer List</h3>
+                    <form class="form-inline" method="GET" action="{% url 'admin-dashboard' %}">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search Customers" aria-label="Search" name="search" value="{{ search_query }}">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </form>
                     <button class="btn btn-primary" data-toggle="collapse" data-target="#customerTable">Show List</button>
                 </div>
                 <div id="customerTable" class="card-body collapse show">
@@ -160,35 +209,43 @@
 <div class="modal fade" id="addMovieModal" tabindex="-1" role="dialog" aria-labelledby="addMovieModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="modal-header">
+            <div class="card">
+                <div class="card-header">
                     <h5 class="modal-title" id="addMovieModalLabel">Add New Movie</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    {{ movie_form.as_p }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add Movie</button>
-                </div>
-            </form>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body card-body">
+                        {{ movie_form.as_p }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Movie</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('logout_btn').addEventListener('click', function () {
+            $('#logoutConfirmationModal').modal('show');
+        });
+    });
+
     // Sample data for the chart
     const genreLabels = ['Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi'];
     const genreData = [12, 19, 3, 5, 2];
