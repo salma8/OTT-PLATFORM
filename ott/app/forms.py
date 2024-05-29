@@ -1,7 +1,5 @@
 from django import forms
-from .models import Movie
-
-#from .models import Subscription
+from .models import Movie, Subscription
 
 
 class MyLoginForm(forms.Form):
@@ -9,12 +7,10 @@ class MyLoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 
-'''class SubscriptionForm(forms.ModelForm):
+class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = Subscription
-        fields = ['customer', 'plan', 'start_date']
-'''
-
+        fields = ['plan']
 
 
 class MovieForm(forms.ModelForm):

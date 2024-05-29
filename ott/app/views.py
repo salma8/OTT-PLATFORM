@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Movie, Customer
-from .forms import MyLoginForm, MovieForm
+from .models import Movie, Customer, Subscription
+from .forms import MyLoginForm, MovieForm, SubscriptionForm
 
 
 def admin_dashboard(request):
@@ -104,19 +104,15 @@ def logout_confirmation(request):
     return render(request, 'logout_confirmation.html')
 
 
-'''def subscribe(request):
+def subscription(request):
     if request.method == 'POST':
         form = SubscriptionForm(request.POST)
         if form.is_valid():
-            customer = form.cleaned_data['customer']
             plan = form.cleaned_data['plan']
-            end_date = form.cleaned_data['start_date'] + timedelta(days=30)
-            subscription = Subscription.objects.create(customer=customer, plan=plan, end_date=end_date)
-            return redirect('subscription_success')  # Redirect to a success page
+            subscription = Subscription.objects.get(plan=plan)
+            request.user.customer.subscription = subscription
+            request.user.customer.save()
+            return redirect('subscription')
     else:
         form = SubscriptionForm()
-    return render(request, 'subscribe.html', {'form': form})
-
-
-def subscription_success(request):
-    return render(request, 'subscription_success.html')'''
+    return render(request, 'subscription.html', {'form': form})

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Plans</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .card {
+
+            margin-bottom: 40px;
+        }
+        ul {
+            list-style-type: none; /* Remove bullet points */
+            padding-left: 0; /* Remove default padding */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Basic Plan</h5>
+                    <ul>
+                        <li><p class="card-text">Price: $199/month</p></li><br>
+                        <li><p class="card-text">Duration: 1 month</p></li><br>
+                        <li><p class="card-text">Watch on 1 supported device at a time</p></li><br>
+                        <li><p class="card-text">Watch in HD</p></li><br>
+                        <li><p class="card-text">Download on 1 supported device at a time</p></li><br>
+                    </ul>
+                    <!-- Form for selecting plan -->
+                    <form action="{% url 'subscription' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan" value="Basic">
+                        <button type="submit" class="btn btn-primary d-block mx-auto">Select Plan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Standard Plan</h5>
+                    <ul>
+                        <li><p class="card-text">Price: $599/6 months</p></li><br>
+                        <li><p class="card-text">Duration: 6 months</p></li><br>
+                        <li><p class="card-text">Watch on 2 supported devices at a time</p></li><br>
+                        <li><p class="card-text">Watch in Full HD</p></li><br>
+                        <li><p class="card-text">Download on 2 supported devices at a time</p></li><br>
+                    </ul>
+                    <!-- Form for selecting plan -->
+                    <form action="{% url 'subscription' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan" value="Standard">
+                        <button type="submit" class="btn btn-primary d-block mx-auto">Select Plan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Premium Plan</h5>
+                    <ul></ul>
+                    <p class="card-text">Price: $1000/year</p>
+                    <p class="card-text">Duration: 1 year</p>
+                    <p class="card-text">Watch on 4 supported devices at a time</p>
+                    <p class="card-text">Watch in Ultra HD</p>
+                    <p class="card-text">Download on 6 supported devices at a time</p>
+                    <!-- Form for selecting plan -->
+                    <form action="{% url 'subscription' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan" value="Premium">
+                        <button type="submit" class="btn btn-primary d-block mx-auto">Select Plan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Movie, Customer
+from .models import Movie, Customer, Subscription
 
 # Register your models here.
 admin.site.register(Movie)
 admin.site.register(Customer)
+admin.site.register(Subscription)
 
 
-# admin.site.register(Subscription)
 
 
 class MovieAdmin(admin.ModelAdmin):
