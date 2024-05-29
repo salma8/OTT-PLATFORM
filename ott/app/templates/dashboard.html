@@ -29,9 +29,8 @@
 </head>
 <body>
 <nav class="navbar navbar-light bg-light">
-  <form class="form-inline ml-auto">
+  <form class="form-inline ml-auto" action="{% url 'logout_confirmation' %}">
       {% csrf_token %}
-      {{ logout.as_p }}
     <button id="btn" class="btn btn-primary" type="button">Log Out</button>
   </form>
 </nav>
@@ -161,55 +160,26 @@
 <div class="modal fade" id="addMovieModal" tabindex="-1" role="dialog" aria-labelledby="addMovieModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addMovieModalLabel">Add New Movie</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="movieTitle">Title</label>
-                        <input type="text" class="form-control" id="movieTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="movieDescription">Description</label>
-                        <textarea class="form-control" id="movieDescription" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="movieGenre">Genre</label>
-                        <input type="text" class="form-control" id="movieGenre" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="movieDirector">Director</label>
-                        <input type="text" class="form-control" id="movieDirector" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="movieDuration">Duration</label>
-                        <input type="text" class="form-control" id="movieDuration" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="movieActor">Actor</label>
-                        <input type="text" class="form-control" id="movieActor" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="movieImage">Image</label>
-                        <input type="file" class="form-control-file" id="movieImage" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="movieVideo">Video</label>
-                        <input type="file" class="form-control-file" id="movieVideo" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Add Movie</button>
-            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMovieModalLabel">Add New Movie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ movie_form.as_p }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Movie</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

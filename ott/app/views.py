@@ -1,18 +1,61 @@
+from datetime import timedelta
+
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Movie, Customer
-from .forms import MyLoginForm
+from .forms import MyLoginForm, MovieForm
 
 
 def admin_dashboard(request):
     movies = Movie.objects.all()
     customers = Customer.objects.all()
+    movie_form = MovieForm()
+
+    if request.method == 'POST':
+        movie_form = MovieForm(request.POST, request.FILES)
+        if movie_form.is_valid():
+            Movie.objects.create(
+                title=movie_form.cleaned_data['title'],
+                description=movie_form.cleaned_data['description'],
+                genre=movie_form.cleaned_data['genre'],
+                director=movie_form.cleaned_data['director'],
+                duration=movie_form.cleaned_data['duration'],
+                actor=movie_form.cleaned_data['actor'],
+                image=movie_form.cleaned_data['image'],
+                video=movie_form.cleaned_data['video']
+            )
+            return redirect('admin_dashboard')  # Replace 'admin_dashboard' with your URL name
+    return render(request, 'dashboard.html', {'movie_form': movie_form, 'customers': customers, 'movies': movies})
+
+
+def dashboard(request):
+    movies = Movie.objects.all()
+    customers = Customer.objects.all()
+    movie_form = MovieForm()
+
+    if request.method == 'POST':
+        movie_form = MovieForm(request.POST, request.FILES)
+        if movie_form.is_valid():
+            Movie.objects.create(
+                title=movie_form.cleaned_data['title'],
+                description=movie_form.cleaned_data['description'],
+                genre=movie_form.cleaned_data['genre'],
+                director=movie_form.cleaned_data['director'],
+                duration=movie_form.cleaned_data['duration'],
+                actor=movie_form.cleaned_data['actor'],
+                image=movie_form.cleaned_data['image'],
+                video=movie_form.cleaned_data['video']
+            )
+            return redirect('admin_dashboard')  # Replace 'admin_dashboard' with your URL name
+
     context = {
         'movies': movies,
         'customers': customers,
+        'movie_form': movie_form
     }
-    return render(request, 'dashboard.html', context)
+    return render(request, 'dashboard.html', {'movie_form': movie_form})
 
 
 def user_login(request):
@@ -35,6 +78,26 @@ def user_login(request):
     return render(request, 'login.html', {'login': login_form})
 
 
-def user_logout(request):
-    logout(request)
-    return redirect('login')
+def logout_confirmation(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('login')  # Redirect to the login page after logout
+    return render(request, 'logout_confirmation.html')
+
+
+'''def subscribe(request):
+    if request.method == 'POST':
+        form = SubscriptionForm(request.POST)
+        if form.is_valid():
+            customer = form.cleaned_data['customer']
+            plan = form.cleaned_data['plan']
+            end_date = form.cleaned_data['start_date'] + timedelta(days=30)
+            subscription = Subscription.objects.create(customer=customer, plan=plan, end_date=end_date)
+            return redirect('subscription_success')  # Redirect to a success page
+    else:
+        form = SubscriptionForm()
+    return render(request, 'subscribe.html', {'form': form})
+
+
+def subscription_success(request):
+    return render(request, 'subscription_success.html')'''
