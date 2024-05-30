@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    {% load static %}
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -68,16 +69,26 @@
     </style>
 </head>
 <body>
+
 <nav class="navbar navbar-light bg-light">
-  <form class="form-inline ml-auto">
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        {% if request.user.is_authenticated %}
+                    <li class="nav-item d-flex align-items-center">
+                        <img src="{% static 'images/logo.png' %}" alt="Logo" style="height: 30px; margin-right: 10px;">
+                        <span class="nav-link">Welcome, {{ request.user.username }}!</span>
+                    </li>
+        {% endif %}
+    </ul>
+  <form class="form-inline ml-auto" action="" method="POST">
       {% csrf_token %}
-      {{logout_confirmation.as_p}}
+      {{ form.as_p }}
     <button id="logout_btn" class="btn btn-primary" type="button">Log Out</button>
   </form>
 </nav>
 
 <div class="container mt-5">
     <h1 class="mb-4">Admin Dashboard</h1>
+    <br><br>
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
@@ -114,9 +125,9 @@
                                     <td>{{ movie.genre }}</td>
                                     <td>{{ movie.director }}</td>
                                     <td>{{ movie.duration }}</td>
-                                    <td>{{ movie.actor }}</td>
+                                    <td>{{ movie.actors }}</td>
                                     <td><img src="{{ movie.image }}" alt="Image" width="50"></td>
-                                    <td><a href="{{ movie.video }}" target="_blank">View Video</a></td>
+                                    <td><a href="{{ movie.video.url }}" target="_blank">View Video</a></td>
                                     <td>
                                             <div class="dropdown">
                                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
@@ -137,6 +148,7 @@
             </div>
         </div>
     </div>
+    <br><br>
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
@@ -172,33 +184,21 @@
                                     <td>{{ customer.End_date}}</td>
                                     <td>{{ customer.Plan }}</td>
                                     <td>
-                                            <div class="dropdown">
-                                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
                                                     style="padding-right:150px;width:150px;border:none">Action
-                                                </button>
-                                                <ul class="dropdown-menu narrow-dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <li><a class="dropdown-item" href="#">Send Notification</a></li>
-                                                    <li><a class="dropdown-item" href="#">Disable</a></li>
-                                                </ul>
-                                            </div>
+                                            </button>
+                                            <ul class="dropdown-menu narrow-dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                <li><a class="dropdown-item" href="#">Send Notification</a></li>
+                                                <li><a class="dropdown-item" href="#">Disable</a></li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Analytics</h3>
-                </div>
-                <div class="card-body">
-                    <canvas id="movieGenreChart"></canvas>
                 </div>
             </div>
         </div>
@@ -216,7 +216,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data" id="uploadMovieForm">
                     {% csrf_token %}
                     <div class="modal-body card-body">
                         {{ movie_form.as_p }}
@@ -234,56 +234,49 @@
 <!-- Bootstrap JS and dependencies -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('logout_btn').addEventListener('click', function () {
-            $('#logoutConfirmationModal').modal('show');
-        });
-    });
+  const form = document.getElementById('uploadMovieForm');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(form);
 
-    // Sample data for the chart
-    const genreLabels = ['Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi'];
-    const genreData = [12, 19, 3, 5, 2];
-
-    // Chart configuration
-    const ctx = document.getElementById('movieGenreChart').getContext('2d');
-    const movieGenreChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: genreLabels,
-            datasets: [{
-                label: '# of Movies',
-                data: genreData,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+    fetch("{% url 'admin-dashboard' %}", {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Close the modal
+        $('#addMovieModal').modal('hide');
+        // Optionally, refresh the movie list or update the UI as needed
+      } else {
+        // Handle errors
+        const errors = data.errors;
+        for (const [field, messages] of Object.entries(errors)) {
+          const errorField = document.querySelector(`[name=${field}]`);
+          if (errorField) {
+            const errorDiv = document.createElement('div');
+            errorDiv.classList.add('error');
+            errorDiv.innerHTML = messages.join('<br>');
+            errorField.parentElement.appendChild(errorDiv);
+          }
         }
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
     });
+  });
+});
 </script>
 </body>
 </html>

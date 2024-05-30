@@ -1,12 +1,10 @@
-from datetime import timedelta
-
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
+
+from .forms import MyLoginForm, MovieForm, SubscriptionForm, LogoutConfirmationForm
 from .models import Movie, Customer, Subscription
-from .forms import MyLoginForm, MovieForm, SubscriptionForm
 
 
 def admin_dashboard(request):
@@ -63,18 +61,18 @@ def dashboard(request):
                 genre=movie_form.cleaned_data['genre'],
                 director=movie_form.cleaned_data['director'],
                 duration=movie_form.cleaned_data['duration'],
-                actor=movie_form.cleaned_data['actor'],
+                actors=movie_form.cleaned_data['actors'],
                 image=movie_form.cleaned_data['image'],
                 video=movie_form.cleaned_data['video']
             )
-            return redirect('admin_dashboard')  # Replace 'admin_dashboard' with your URL name
+            return redirect('admin_dashboard')
 
     context = {
         'movies': movies,
         'customers': customers,
         'movie_form': movie_form
     }
-    return render(request, 'dashboard.html', {'movie_form': movie_form})
+    return render(request, 'dashboard.html', {'movie_form': context})
 
 
 def user_login(request):
@@ -97,13 +95,6 @@ def user_login(request):
     return render(request, 'login.html', {'login': login_form})
 
 
-def logout_confirmation(request):
-    if request.method == 'POST':
-        logout(request)
-        return redirect('login')  # Redirect to the login page after logout
-    return render(request, 'logout_confirmation.html')
-
-
 def subscription(request):
     if request.method == 'POST':
         form = SubscriptionForm(request.POST)
@@ -116,3 +107,39 @@ def subscription(request):
     else:
         form = SubscriptionForm()
     return render(request, 'subscription.html', {'form': form})
+
+
+def upload_movie(request):
+    if request.method == 'POST':
+        form = MovieForm(request.POST, request.FILES)
+        if form.is_valid():
+            movie = form.save()
+            # Prepare movie data to send back to the client
+            movie_data = {
+                'title': movie.title,
+                'description': movie.description,
+                'genre': movie.genre,
+                'director': movie.director,
+                'duration': movie.duration,
+                'actor': movie.actor,
+                'image_url': movie.image.url if movie.image else '',  # Adjust based on your model
+                'video_url': movie.video.url if movie.video else '',  # Adjust based on your model
+            }
+            return JsonResponse({'success': True, 'movie': movie_data})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        form = MovieForm()
+    return render(request, 'dashboard.html', {'form': form})
+
+
+def logout_confirmation(request):
+    if request.method == 'POST':
+        form = LogoutConfirmationForm(request.POST)
+        if form.is_valid():
+            logout(request)
+            return redirect('login')  # Redirect to the login page after logout
+    else:
+        form = LogoutConfirmationForm()
+
+    return render(request, 'logout_confirmation.html', {'form': form})

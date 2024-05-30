@@ -16,5 +16,8 @@ class SubscriptionForm(forms.ModelForm):
 class MovieForm(forms.ModelForm):
     class Meta:
         model = Movie
-        fields = '__all__'
+        fields = 'title', 'description', 'genre', 'director', 'actors', 'duration', 'video', 'image'
 
+
+class LogoutConfirmationForm(forms.ModelForm):
+    pass
